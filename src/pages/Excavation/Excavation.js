@@ -42,7 +42,7 @@ const Excavation = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+      const API_BASE_URL = "https://cors-anywhere.herokuapp.com/" + process.env.REACT_APP_API_BASE_URL;
       const API_KEY = process.env.REACT_APP_API_KEY;
       const SERVICE = "DS_625_KIA_COPSEXCVT_PRS";
       const MAX_INDEX = 100;

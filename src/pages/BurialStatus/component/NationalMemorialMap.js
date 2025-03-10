@@ -42,7 +42,7 @@ const NationalMemorialMap = () => {
     const fetchBurialData = async () => {
       setLoading(true);
       try {
-        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+        const API_BASE_URL = "https://cors-anywhere.herokuapp.com/" + process.env.REACT_APP_API_BASE_URL;
         const API_KEY = process.env.REACT_APP_API_KEY;
         const totalDataCount = 60000;
         const API_URL = `${API_BASE_URL}/${API_KEY}/json/DS_TB_MND_NTNLMMCMT_BURALPRSTS/1/${totalDataCount}`;
