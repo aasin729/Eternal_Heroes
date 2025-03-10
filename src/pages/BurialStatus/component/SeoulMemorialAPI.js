@@ -21,7 +21,7 @@ const SeoulMemorialAPI = () => {
 
   const fetchData = async () => {
     try {
-      const API_BASE_URL = "https://cors-anywhere.herokuapp.com/" + process.env.REACT_APP_API_BASE_URL;
+      const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
       const API_KEY = process.env.REACT_APP_API_KEY;
       const API_URL = `${API_BASE_URL}/${API_KEY}/json/DS_MMCMTSEOUL_BURAL_PRST/1/12`;
   
