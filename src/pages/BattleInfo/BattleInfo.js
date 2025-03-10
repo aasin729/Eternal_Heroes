@@ -42,8 +42,9 @@ const BattleInfo = () => {
     setError(null);
 
     try {
+      const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
       const API_KEY = process.env.REACT_APP_API_KEY;
-      const API_URL = `/${API_KEY}/json/DS_WARHSTR_KORWAR_CBT_IN/1/1000`;
+      const API_URL = `${API_BASE_URL}/${API_KEY}/json/DS_WARHSTR_KORWAR_CBT_IN/1/1000`;
 
       const response = await axios.get(API_URL);
       const result = response.data.DS_WARHSTR_KORWAR_CBT_IN.row;

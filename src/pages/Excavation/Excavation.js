@@ -42,6 +42,7 @@ const Excavation = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
       const API_KEY = process.env.REACT_APP_API_KEY;
       const SERVICE = "DS_625_KIA_COPSEXCVT_PRS";
       const MAX_INDEX = 100;
@@ -50,7 +51,7 @@ const Excavation = () => {
       let allData = [];
 
       while (true) {
-        const API_URL = `/${API_KEY}/json/${SERVICE}/${startIndex}/${endIndex}`;
+        const API_URL = `${API_BASE_URL}/${API_KEY}/json/${SERVICE}/${startIndex}/${endIndex}`;
         const response = await axios.get(API_URL);
         const result = response.data[SERVICE]?.row || [];
         allData = [...allData, ...result];
