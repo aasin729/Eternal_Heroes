@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Chart from "react-apexcharts";
 import Slider from "react-slick";
 import YoutubeSection from "../Excavation/component/YoutubeSection";
 import Footer from "../../shared/footer";
+import excavationData from "../../data/excavation_data.json";
 
 const Excavation = () => {
 
@@ -42,34 +42,25 @@ const Excavation = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-      const API_KEY = process.env.REACT_APP_API_KEY;
-      const SERVICE = "DS_625_KIA_COPSEXCVT_PRS";
-      const MAX_INDEX = 100;
-      let startIndex = 1;
-      let endIndex = MAX_INDEX;
-      let allData = [];
-
-      while (true) {
-        const API_URL = `${API_BASE_URL}/${API_KEY}/json/${SERVICE}/${startIndex}/${endIndex}`;
-        const response = await axios.get(API_URL);
-        const result = response.data[SERVICE]?.row || [];
-        allData = [...allData, ...result];
-        if (result.length < MAX_INDEX) break;
-        startIndex = endIndex + 1;
-        endIndex += MAX_INDEX;
+  
+      // JSON 파일에서 "DATA" 키의 배열 가져오기
+      const allData = excavationData.DATA;
+  
+      if (!Array.isArray(allData)) {
+        throw new Error("올바른 데이터 형식이 아닙니다.");
       }
-
+  
+      // 중복 제거
       const uniqueData = allData.filter((item, index, self) => {
         return (
           index ===
           self.findIndex(
-            (t) =>
-              t.std_date === item.std_date && t.excvt_year === item.excvt_year
+            (t) => t.std_date === item.std_date && t.excvt_year === item.excvt_year
           )
         );
       });
-
+  
+      // 총합 계산
       const totals = uniqueData.reduce(
         (acc, item) => {
           acc.ourfrcs_roka += parseInt(item.ourfrcs_roka || 0);
@@ -81,11 +72,11 @@ const Excavation = () => {
         },
         { ourfrcs_roka: 0, ourfrcs_unmil: 0, et_nk: 0, et_chn: 0, idntycfmtn_kia: 0 }
       );
-
+  
       setTotals(totals);
       setData(uniqueData);
     } catch (error) {
-      console.error("API 호출 실패:", error);
+      console.error("JSON 데이터 불러오기 실패:", error);
       setError("데이터를 불러오는데 실패했습니다.");
     } finally {
       setLoading(false);

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import HeroCards from "../BattleInfo/component/HeroCards";
 import Footer from "../../shared/footer";
+import battleDataJson from "../../data/battle_data.json";
 
 const BattleInfo = () => {
    useEffect(() => {
@@ -40,21 +40,21 @@ const BattleInfo = () => {
   const fetchBattleInfo = async () => {
     setLoading(true);
     setError(null);
-
+  
     try {
-      const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-      const API_KEY = process.env.REACT_APP_API_KEY;
-      const API_URL = `${API_BASE_URL}/${API_KEY}/json/DS_WARHSTR_KORWAR_CBT_IN/1/1000`;
-
-      const response = await axios.get(API_URL);
-      const result = response.data.DS_WARHSTR_KORWAR_CBT_IN.row;
-
-      const filteredData = result
-        .filter((item) => item.addtn_itm_2)
+      // JSON 파일에서 "DATA" 키의 배열 가져오기
+      const allData = battleDataJson.DATA;
+  
+      if (!Array.isArray(allData)) {
+        throw new Error("올바른 데이터 형식이 아닙니다.");
+      }
+  
+      const filteredData = allData
+        .filter((item) => item.addtn_itm_2) // 추가 항목 2가 있는 항목만 필터링
         .map((item) => {
           const period = item.addtn_itm_2;
           const match = period.match(/(\d{4})\.(\d{1,2})(?:\.(\d{1,2}))?/);
-
+  
           if (match) {
             const year = match[1];
             const month = match[2].padStart(2, "0");
@@ -67,18 +67,19 @@ const BattleInfo = () => {
           return item;
         })
         .filter((item) => item.parsedDate)
-        // .sort((a, b) => b.parsedDate - a.parsedDate);
-        .sort((a, b) => a.parsedDate - b.parsedDate);
-
+        .sort((a, b) => a.parsedDate - b.parsedDate); // 날짜순 정렬
+  
+      // 데이터 그룹화 함수 호출
       const groupedData = groupByDate(filteredData);
       setBattleData(groupedData);
     } catch (err) {
-      console.error("Error fetching battle information:", err);
-      // setError("데이터를 가져오는 중 오류가 발생했습니다.");
+      console.error("JSON 데이터 불러오기 실패:", err);
+      setError("데이터를 가져오는 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   const groupByDate = (data) => {
     return data.reduce((acc, item) => {

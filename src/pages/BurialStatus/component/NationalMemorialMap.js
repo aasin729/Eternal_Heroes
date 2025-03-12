@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import burialLocations from "../../../data/burialLocations";
+import burialDataJson from "../../../data/national_cemetery_burials.json";
 
 const NationalMemorialMap = () => {
 
@@ -39,33 +39,32 @@ const NationalMemorialMap = () => {
   const itemsPerPage = 15;
   const maxPageButtons = 4;
 
-    const fetchBurialData = async () => {
-      setLoading(true);
-      try {
-        const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-        const API_KEY = process.env.REACT_APP_API_KEY;
-        const totalDataCount = 60000;
-        const API_URL = `${API_BASE_URL}/${API_KEY}/json/DS_TB_MND_NTNLMMCMT_BURALPRSTS/1/${totalDataCount}`;
+  const fetchBurialData = async () => {
+    setLoading(true);
+    try {
+      // JSON 파일에서 "DATA" 키의 배열 가져오기
+      const allData = burialDataJson.DATA;
   
-        const response = await axios.get(API_URL);
-        const result = response?.data?.DS_TB_MND_NTNLMMCMT_BURALPRSTS?.row;
-  
-        if (result && Array.isArray(result)) {
-          const reversedData = result.reverse();
-          setBurialData(reversedData);
-          setFilteredData(reversedData);
-  
-          const militarySet = new Set(reversedData.map((item) => item.mildsc));
-          setMilitaryOptions([...militarySet]);
-        } else {
-          throw new Error("API 데이터 형식 오류");
-        }
-      } catch (error) {
-        console.error("API 호출 실패:", error);
-      } finally {
-        setLoading(false);
+      if (!Array.isArray(allData)) {
+        throw new Error("올바른 데이터 형식이 아닙니다.");
       }
-    };
+  
+      // 데이터 순서를 뒤집어서 최신 데이터가 먼저 오도록 정렬
+      const reversedData = allData.reverse();
+  
+      // 상태 업데이트
+      setBurialData(reversedData);
+      setFilteredData(reversedData);
+  
+      // 군별(mildsc) 필터 옵션 설정
+      const militarySet = new Set(reversedData.map((item) => item.mildsc));
+      setMilitaryOptions([...militarySet]);
+    } catch (error) {
+      console.error("JSON 데이터 불러오기 실패:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchBurialData();
