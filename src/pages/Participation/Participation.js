@@ -184,8 +184,8 @@ const Participation = () => {
 
   useEffect(() => {
     const globe = Globe()(globeEl.current)
-      .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
-      .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
+      .globeImageUrl("https://unpkg.com/three-globe@2.24.12/example/img/earth-blue-marble.jpg")
+      .bumpImageUrl("https://unpkg.com/three-globe@2.24.12/example/img/earth-topology.png")
       .customLayerData(adjustedCountries)
       .customThreeObject(({ flag }) => {
         const texture = new THREE.TextureLoader().load(flag);
