@@ -209,7 +209,6 @@ const NationalMemorialMap = () => {
                 onFocus={() => setSelectedMilitary("")}
                 className="w-full h-14 px-4 border rounded-lg shadow focus:ring-2 focus:ring-blue-400"
               />
-
               <select
                 value={selectedMilitary}
                 onChange={(e) => setSelectedMilitary(e.target.value)}
@@ -217,13 +216,16 @@ const NationalMemorialMap = () => {
                 className="w-full h-14 px-4 border rounded-lg shadow focus:ring-2 focus:ring-blue-400"
               >
                 <option value="">군별 선택</option>
-                {militaryOptions.map((military, index) => (
-                  <option key={index} value={military}>
-                    {military}
-                  </option>
-                ))}
+                {militaryOptions
+                  .filter(
+                    (military) => military !== "독도의용수비대" && military !== "국가유공"
+                  )
+                  .map((military, index) => (
+                    <option key={index} value={military}>
+                      {military}
+                    </option>
+                  ))}
               </select>
-              
               <button
                 onClick={handleSearchAndFilter}
                 className="w-full h-14 px-6 bg-blue-900 text-white font-bold rounded-lg shadow hover:bg-blue-800"

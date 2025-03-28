@@ -1,6 +1,6 @@
 // burialLocations.js
 const burialLocations = [
-    { lat: 37.5026173, lng: 126.9720634, burialName: "01묘역" },
+    { lat: 37.5026173, lng: 126.9720634, burialName: "사병1묘역" },
     { lat: 37.5021981, lng: 126.9721734, burialName: "02묘역" },
     { lat: 37.5022109, lng: 126.9711649, burialName: "03묘역" },
     { lat: 37.5021002, lng: 126.9701912, burialName: "04묘역" },
